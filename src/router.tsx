@@ -8,6 +8,8 @@ import CatCreatePage from './pages/CatCreatePage';
 import HomePage from './pages/HomePage';
 import CatDetailPage from './pages/CatDetailPage';
 import CatEditPage from './pages/CatEditPage';
+import FavouritePage from './pages/FavouritePage';
+import ChatRoomPage from './pages/ChatRoomPage';
 
 export const routes: RouteObject[] = [
   {
@@ -55,6 +57,22 @@ export const routes: RouteObject[] = [
         element: (
           <RequireAuth>
             <CatDetailPage />
+          </RequireAuth>
+        )
+      },
+      {
+        path: '/favourite',
+        element: (
+          <RequireAuth>
+            <FavouritePage />
+          </RequireAuth>
+        )
+      },
+      {
+        path: '/chatroom',
+        element: (
+          <RequireAuth>
+            <ChatRoomPage />
           </RequireAuth>
         )
       }

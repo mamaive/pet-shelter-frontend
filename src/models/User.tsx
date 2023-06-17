@@ -1,5 +1,5 @@
 export interface Profile {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -21,6 +21,7 @@ export interface UserRegisterForm {
   role: string;
   organization?: string;
   staffID?: string;
+  signupCode?: string;
 }
 
 export interface UserLoginForm {

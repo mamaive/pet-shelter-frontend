@@ -21,7 +21,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const register = async (registerInfo: UserRegisterForm) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
+      console.log('in form', registerInfo);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/user/register`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
@@ -55,7 +56,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (loginInfo: UserLoginForm) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/login`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/user/login`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
@@ -98,7 +99,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getProfile = async (userID: string) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/${userID}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/user/${userID}`);
 
       if (!res.ok) {
         throw new Error('Get profile error');

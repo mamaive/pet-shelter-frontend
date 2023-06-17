@@ -120,20 +120,34 @@ export default function App() {
         open={isMobileMenuOpen}
         onClose={handleMobileMenuClose}
       >
-        <MenuItem>
-          <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-            <Badge badgeContent={4} color="error">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
-          <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-            <FavoriteIcon />
-          </IconButton>
-          <p>Favorite List</p>
-        </MenuItem>
+        {auth.getRole() === '2' && (
+          <MenuItem>
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+              onClick={() => navigate('/chatroom')}
+            >
+              <Badge badgeContent={4} color="error">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <p>Messages</p>
+          </MenuItem>
+        )}
+        {auth.getRole() == '1' && (
+          <MenuItem>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+              onClick={() => navigate('/favourite')}
+            >
+              <FavoriteIcon />
+            </IconButton>
+            <p>Favorite List</p>
+          </MenuItem>
+        )}
         <MenuItem onClick={handleProfileMenuOpen}>
           <IconButton
             size="large"
@@ -169,14 +183,28 @@ export default function App() {
             <Box sx={{ flexGrow: 1 }} />
             {auth.isLogin() ? (
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                  <Badge badgeContent={4} color="error">
-                    <MailIcon />
-                  </Badge>
-                </IconButton>
-                <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-                  <FavoriteIcon />
-                </IconButton>
+                {auth.getRole() === '2' && (
+                  <IconButton
+                    size="large"
+                    aria-label="show 4 new mails"
+                    color="inherit"
+                    onClick={() => navigate('/chatroom')}
+                  >
+                    <Badge badgeContent={4} color="error">
+                      <MailIcon />
+                    </Badge>
+                  </IconButton>
+                )}
+                {auth.getRole() == '1' && (
+                  <IconButton
+                    size="large"
+                    aria-label="show 17 new notifications"
+                    color="inherit"
+                    onClick={() => navigate('/favourite')}
+                  >
+                    <FavoriteIcon />
+                  </IconButton>
+                )}
                 <IconButton
                   size="large"
                   edge="end"

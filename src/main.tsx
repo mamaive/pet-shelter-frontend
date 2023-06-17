@@ -9,13 +9,22 @@ import { RouterProvider } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { CatProvider } from './contexts/CatContext';
 import { router } from './router';
+import { FavouriteProvider } from './contexts/FavouriteContext';
+import { ChatRoomProvider } from './contexts/ChatRoomContext';
+import { MessageProvider } from './contexts/MessageContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AuthProvider>
-      <CatProvider>
-        <RouterProvider router={router} />
-      </CatProvider>
+      <ChatRoomProvider>
+        <MessageProvider>
+          <FavouriteProvider>
+            <CatProvider>
+              <RouterProvider router={router} />
+            </CatProvider>
+          </FavouriteProvider>
+        </MessageProvider>
+      </ChatRoomProvider>
     </AuthProvider>
   </React.StrictMode>
 );

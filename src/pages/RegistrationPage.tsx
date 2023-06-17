@@ -30,17 +30,25 @@ export default function RegistrationPage() {
       passwordConfirm: '',
       role: '',
       organization: '',
-      staffID: ''
+      staffID: '',
+      signupCode: ''
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required(),
       lastName: Yup.string().required(),
-      email: Yup.string().required(),
-      password: Yup.string().required(),
-      passwordConfirm: Yup.string().required(),
+      email: Yup.string().email().required(),
+      password: Yup.string()
+        .required()
+        .min(8, 'Password must be 8 characters long')
+        .matches(/[0-9]/, 'Password requires a number')
+        .matches(/[a-z]/, 'Password requires a lowercase letter')
+        .matches(/[A-Z]/, 'Password requires an uppercase letter')
+        .matches(/[^\w]/, 'Password requires a symbol'),
+      passwordConfirm: Yup.string().oneOf([Yup.ref('password'), ''], 'Passwords must match'),
       role: Yup.string().required(),
       organization: Yup.string(),
-      staffID: Yup.string()
+      staffID: Yup.string(),
+      signupCode: Yup.string().matches(/^(1234)$/, 'Signup code is not valid')
     }),
     onSubmit: async (values, { setSubmitting }) => {
       const result = await auth.register(values);
@@ -185,6 +193,19 @@ export default function RegistrationPage() {
                       value={formik.values.staffID}
                       error={formik.touched.staffID && Boolean(formik.errors.staffID)}
                       helperText={formik.touched.staffID && formik.errors.staffID}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Sign Up Code"
+                      id="signupCode"
+                      name="signupCode"
+                      onBlur={formik.handleBlur}
+                      onChange={formik.handleChange}
+                      value={formik.values.signupCode}
+                      error={formik.touched.signupCode && Boolean(formik.errors.signupCode)}
+                      helperText={formik.touched.signupCode && formik.errors.signupCode}
                     />
                   </Grid>
                 </>

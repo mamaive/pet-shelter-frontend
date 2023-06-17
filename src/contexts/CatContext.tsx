@@ -18,7 +18,7 @@ export const CatProvider = ({ children }: { children: React.ReactNode }) => {
 
   const listCat = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/cats`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/cat`);
 
       if (!res.ok) {
         throw new Error('List Cat Error');
@@ -45,7 +45,13 @@ export const CatProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getCat = async (catID: string) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/cats/${catID}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/cat/${catID}`, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      });
 
       if (!res.ok) {
         throw new Error('Get Cat Error');
@@ -72,10 +78,11 @@ export const CatProvider = ({ children }: { children: React.ReactNode }) => {
 
   const createCat = async (catInfo: CatCreateForm) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/cats`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/cat`, {
         method: 'post',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(catInfo)
       });
@@ -105,10 +112,11 @@ export const CatProvider = ({ children }: { children: React.ReactNode }) => {
 
   const updateCat = async (catInfo: Cat) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/cats/${catInfo.id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/cat/${catInfo.id}`, {
         method: 'put',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(catInfo)
       });
@@ -137,12 +145,12 @@ export const CatProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const deleteCat = async (catInfo: Cat) => {
-    catInfo.status = '0';
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/cats/${catInfo.id}`, {
-        method: 'put',
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/cat/${catInfo.id}`, {
+        method: 'delete',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(catInfo)
       });

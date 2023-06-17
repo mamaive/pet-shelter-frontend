@@ -22,3 +22,13 @@ npm run dev
 
 [Image Upload](https://codevoweb.com/react-rtk-query-react-hook-form-and-material-ui-multipart-formdata/)
 
+
+Sign Up Code
+
+1234
+
+staff@abc.com
+staff
+
+mem@abc.com
+mem

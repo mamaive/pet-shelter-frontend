@@ -13,19 +13,19 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useCat } from '../contexts/CatContext';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Cat } from '../models/Cat';
-import SearchIcon from '@mui/icons-material/Search';
+import { useCat } from '../contexts/CatContext';
+import AlignItemsList from '../components/AlignItemsList';
 import { useFavourite } from '../contexts/FavouriteContext';
+import { Favourite } from '../models/Favourite';
+import SearchIcon from '@mui/icons-material/Search';
+import { useAuth } from '../contexts/AuthContext';
 
-function HomePage() {
+export default function FavouritePage() {
   const navigate = useNavigate();
   let auth = useAuth();
-  let cat = useCat();
   let favourite = useFavourite();
 
   const cat_breed = [
@@ -75,7 +75,8 @@ function HomePage() {
       value: 'Munchkin'
     }
   ];
-  const [catList, setCatList] = useState<Cat[]>([]);
+
+  const [favouiteList, setFavouiteList] = useState<Favourite[]>([]);
 
   const [filterSearchValue, setFilterSearchValue] = useState<string>('');
   const [filterBreedValue, setFilterBreedValue] = useState<string>('');
@@ -97,45 +98,45 @@ function HomePage() {
     navigate(`/cat/${id}`);
     const result = await favourite.listFavourite();
     if (!(result.filter((x: any) => x['cat']['id'] == id).length > 0)) {
-      favourite.createFavourite({ user: auth.getID(), cat: id.toString(), status: '0' });
+      favourite.createFavourite({ user: auth.getID(), cat: id.toString() });
     }
   };
 
-  const filteredRows = catList.filter((item) => {
+  const filteredRows = favouiteList.filter((item) => {
     if (filterSearchValue.length == 0 && filterBreedValue == '') {
       return true;
     }
     if (filterSearchValue.length > 0 && filterBreedValue == '') {
       console.log(
-        item.name.toLowerCase(),
+        item.cat.name.toLowerCase(),
         filterSearchValue.toLowerCase(),
-        item.name.toLowerCase().includes(filterSearchValue.toLowerCase())
+        item.cat.name.toLowerCase().includes(filterSearchValue.toLowerCase())
       );
-      return item.name.toLowerCase().includes(filterSearchValue.toLowerCase());
+      return item.cat.name.toLowerCase().includes(filterSearchValue.toLowerCase());
     }
     if (filterSearchValue.length == 0 && filterBreedValue != '') {
-      return item.breed.toString() == filterBreedValue;
+      return item.cat.breed.toString() == filterBreedValue;
     }
     if (filterSearchValue.length > 0 && filterBreedValue != '') {
       return (
-        item.name.toLowerCase().includes(filterSearchValue.toLowerCase()) && item.breed.toString() == filterBreedValue
+        item.cat.name.toLowerCase().includes(filterSearchValue.toLowerCase()) &&
+        item.cat.breed.toString() == filterBreedValue
       );
     }
     return false;
   });
 
-  const initCatList = async () => {
-    const result = await cat.listCat();
-    console.log('cat list', result);
-    setCatList(result);
+  const initFavouiteList = async () => {
+    const result = (await favourite.listFavourite()).filter((x: any) => x['status'] == '1');
+    setFavouiteList(result);
   };
-
   useEffect(() => {
-    initCatList();
+    initFavouiteList();
   }, []);
 
   return (
     <Container>
+      <Typography variant={'h2'}>My Favourite</Typography>
       <Card sx={{ my: 2 }}>
         <CardContent>
           <Grid container justifyContent="space-between" alignItems="center">
@@ -192,43 +193,25 @@ function HomePage() {
         </CardContent>
       </Card>
 
-      {auth.isLogin() && auth.getRole() === '2' && (
-        <Button variant="contained" onClick={() => navigate('/cat/create')}>
-          Add Cat
-        </Button>
-      )}
-
       {filteredRows.length > 0 && (
         <Grid container sx={{ pt: 2 }} spacing={2}>
-          {filteredRows.map((cat: any) => (
-            <Grid item key={cat.id} xs={12} sm={6} md={2}>
+          {filteredRows.map((favourite: any) => (
+            <Grid item key={favourite.cat.id} xs={12} sm={6} md={2}>
               <Card
                 sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                onClick={() => handleOnClick(cat.id)}
+                onClick={() => handleOnClick(favourite.cat.id)}
               >
                 <CardMedia
                   component="img"
-                  image={`${import.meta.env.VITE_API_URL}/uploads/${cat.image}`}
+                  image={`${import.meta.env.VITE_API_URL}/uploads/${favourite.cat.image}`}
                   alt="random"
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography gutterBottom variant="h5" component="h2">
-                    {cat.name}
+                    {favourite.cat.name}
                   </Typography>
-                  <Typography>{cat.description}</Typography>
+                  <Typography>{favourite.cat.description}</Typography>
                 </CardContent>
-                {/* <CardActions>
-                  {auth.isLogin() && auth.getRole() === '1' && (
-                    <IconButton
-                      aria-label="add to favorites"
-                      onClick={() => {
-                        console.log('favorite', cat.favorite);
-                      }}
-                    >
-                      <FavoriteIcon />
-                    </IconButton>
-                  )}
-                </CardActions> */}
               </Card>
             </Grid>
           ))}
@@ -238,5 +221,3 @@ function HomePage() {
     </Container>
   );
 }
-
-export default HomePage;

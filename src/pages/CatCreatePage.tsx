@@ -1,13 +1,15 @@
-import { Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, CssBaseline, TextField, Typography, MenuItem } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useCat } from '../contexts/CatContext';
 import { useNavigate } from 'react-router-dom';
 import PhotoUploadWidget from '../components/PhotoUploadWidget';
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function CatCreatePage() {
   const navigate = useNavigate();
+  let auth = useAuth();
   const cat = useCat();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -17,8 +19,57 @@ export default function CatCreatePage() {
     formik.setFieldValue('image', fileName);
   };
 
+  const cat_breed = [
+    {
+      label: 'Siamese',
+      value: 'Siamese'
+    },
+    {
+      label: 'Persian',
+
+      value: 'Persian'
+    },
+    {
+      label: 'British Shorthair',
+      value: 'British Shorthair'
+    },
+    {
+      label: 'Scottish Fold',
+      value: 'Scottish Fold'
+    },
+    {
+      label: 'American Shorthair',
+      value: 'American Shorthair'
+    },
+    {
+      label: 'Sphynx',
+
+      value: 'Sphynx'
+    },
+    {
+      label: 'Birman',
+
+      value: 'Birman'
+    },
+    {
+      label: 'Maine Coon',
+
+      value: 'Maine Coon'
+    },
+    {
+      label: 'Russian Blue',
+      value: 'Russian Blue'
+    },
+    {
+      label: 'Munchkin',
+
+      value: 'Munchkin'
+    }
+  ];
+
   const formik = useFormik({
     initialValues: {
+      user: auth.getID(),
       name: '',
       breed: '',
       age: '',
@@ -26,6 +77,7 @@ export default function CatCreatePage() {
       image: ''
     },
     validationSchema: Yup.object({
+      user: Yup.string().max(99).required(),
       name: Yup.string().max(99).required(),
       breed: Yup.string().max(99).required(),
       age: Yup.string().required(),
@@ -76,12 +128,20 @@ export default function CatCreatePage() {
             label="Cat Breed"
             id="breed"
             name="breed"
+            select
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.breed}
             error={formik.touched.breed && Boolean(formik.errors.breed)}
             helperText={formik.touched.breed && formik.errors.breed}
-          />
+          >
+            {cat_breed.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+
           <TextField
             fullWidth
             margin="normal"

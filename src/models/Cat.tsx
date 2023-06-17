@@ -9,6 +9,7 @@ export interface Cat {
 }
 
 export interface CatCreateForm {
+  user: string;
   name: string;
   breed: string;
   age: string;
