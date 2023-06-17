@@ -8,12 +8,12 @@ npm run dev
 
 ## Function - Frontend
 
-- [ ] Registration Page - Public
-- [ ] Login Page - Public
-- [ ] Cat Management Page - Worker
-- [ ] Home Page - Public / Member / Worker
-- [ ] Cat Searching - Public / Member / Worker
-- [ ] Cat Filter - Public / Member / Worker
+- [x] Registration Page - Public
+- [x] Login Page - Public
+- [x] Cat Management Page - Worker
+- [x] Home Page - Public / Member / Worker
+- [x] Cat Searching - Public / Member / Worker
+- [x] Cat Filter - Public / Member / Worker
 
 
 ## Reference
